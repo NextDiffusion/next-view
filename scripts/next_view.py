@@ -4,12 +4,13 @@ from pathlib import Path
 from modules import script_callbacks
 import modules.scripts as scripts
 import datetime
+import re
 
 base_dir = scripts.basedir()
 
 
 def split_video_to_images(video_path, output_dir):
-    output_pattern = Path(output_dir) / "frame_%04d.jpg"
+    output_pattern = Path(output_dir) / "frame_%04d.png"
     ffprobe_cmd = [
         "ffprobe",
         "-v", "error",
@@ -59,11 +60,24 @@ def image_sequence_to_video(image_sequence_location):
     output_directory.mkdir(parents=True, exist_ok=True)
     output_video_path = output_directory / f"output_video_{timestamp}.mp4"
 
+    # Detect the first frame number dynamically
+    frame_files = sorted(image_sequence_location.glob("frame_*.png"))
+    if frame_files:
+        first_frame = frame_files[0].name
+        match = re.search(r'(\d+)', first_frame)
+        if match:
+            start_frame_number = int(match.group())
+        else:
+            start_frame_number = 1
+    else:
+        start_frame_number = 1
+
     # Use ffmpeg to convert image sequences into a video
     ffmpeg_cmd = [
         "ffmpeg",
         "-framerate", "30",  # You can set the desired frame rate here
-        "-i", f"{image_sequence_location}/frame_%04d.jpg",
+        "-start_number", str(start_frame_number),  # Set the start frame number
+        "-i", f"{image_sequence_location}/frame_%04d.png",
         "-c:v", "libx264",
         "-pix_fmt", "yuv420p",
         output_video_path,
