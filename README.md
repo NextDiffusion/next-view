@@ -32,7 +32,7 @@ In a nutshell, if you want to do anything with audio or video files, FFmpeg is a
 
 ## Usage
 
-On the left side you have the **"Video 2 Image Sequence"** section where you can upload a video and turn in into an **image sequence**:
+On the left side you have the "Video 2 Image Sequence" section where you can upload a video and turn in into an **image sequence**:
 
 ![Next_Diffusion_Next_View_Video2ImageSequence](https://res.cloudinary.com/db7mzrftq/image/upload/v1695209566/Next_Diffusion_Next_View_Video2_Image_Sequence_nextdiffusion_943d22af2e.webp)
 
@@ -50,7 +50,7 @@ _You also have the option to click the "Clear" button to remove the uploaded vid
 - You now have the option to copy the output location by clicking on the "Copy" icon in the right bottom corner.
 
 
-On the right side you have the **"Image Sequence 2 Video"** section:
+On the right side you have the "Image Sequence 2 Video" section:
 
 ![Next_Diffusion_Next_View_ImageSequence2Video](https://res.cloudinary.com/db7mzrftq/image/upload/v1695209722/Next_Diffusion_Next_View_Image_Sequence2_Video_4cb9aca4ae.webp)
 
