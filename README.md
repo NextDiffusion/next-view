@@ -7,10 +7,8 @@ Adds a 'NextView' tab to the webui that allows the user to:
 
 ![Next_Diffusion_Next_View_Video2ImageSequence_ImageSequence2Video](https://res.cloudinary.com/db7mzrftq/image/upload/v1695207953/Next_Diffusion_Next_View_Video2_Image_Sequence_Image_Sequence2_Video_d463eb9365.webp)
 
-
-
 ## Requirements
-Make sure you have ffmpeg installed. Not sure [how to install ffmpeg]([https://www.nextdiffusion.ai/](https://www.nextdiffusion.ai/tutorials/how-to-install-ffmpeg-on-windows-for-stable-diffusion-a-comprehensive-guide)) on your machine?
+Make sure you have ffmpeg installed. Not sure [how to install ffmpeg](https://www.nextdiffusion.ai/tutorials/how-to-install-ffmpeg-on-windows-for-stable-diffusion-a-comprehensive-guide) on your machine?
 
 ### What is FFmpeg?
 FFmpeg is a powerful and versatile software tool that allows you to work with audio and video files. It's like a Swiss Army knife for multimedia tasks.
