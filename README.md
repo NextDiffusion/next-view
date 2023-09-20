@@ -55,7 +55,7 @@ On the right side you have the "Image Sequence 2 Video" section:
 ![Next_Diffusion_Next_View_ImageSequence2Video](https://res.cloudinary.com/db7mzrftq/image/upload/v1695209722/Next_Diffusion_Next_View_Image_Sequence2_Video_4cb9aca4ae.webp)
 
 **Input**
-- Start by pasting a Image Sequence Location folder name
+- Start by pasting an "Image Sequence Location" folder name
 - The images within this folder **should be of PNG format**
 - The images **should have the following naming structure** when converting to a video: "frame_0001", "frame_0002" etc. 
 - When everything is correct you can click on the "Generate Video" button to turn it into an image sequence
