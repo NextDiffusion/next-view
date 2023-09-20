@@ -67,5 +67,5 @@ On the right side you have the **Image Sequence 2 Video** section:
 
 ## Credits 2 **Next Diffusion** ❤️
 
-- [Next Diffusion Website](https://www.nextdiffusion.ai/) ❤
-- [Next Diffusion Youtube](https://www.youtube.com/channel/UCd9UIUkLnjE-Fj-CGFdU74Q?sub_confirmation=1) ❤
+- [Next Diffusion Website](https://www.nextdiffusion.ai/) 
+- [Next Diffusion Youtube](https://www.youtube.com/channel/UCd9UIUkLnjE-Fj-CGFdU74Q?sub_confirmation=1) 
