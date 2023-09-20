@@ -43,12 +43,10 @@ def submit_video(video):
 
     # Create a unique subfolder within "image_sequences" using the timestamp and random identifier
     output_dir = Path(base_dir, "image_sequences", f"{timestamp}")
-
     # Create parent directories if needed
     output_dir.mkdir(parents=True, exist_ok=True)
 
     split_video_to_images(video, output_dir)
-
     return str(output_dir)  # Return the output directory as a string
 
 
@@ -86,43 +84,52 @@ def image_sequence_to_video(image_sequence_location):
 
     return output_video_path
 
+def clear_video_input(inp):
+    inp.value = None
+    return inp
 
 def on_ui_tabs():
 
     with gr.Blocks(analytics_enabled=False) as next_view:
         with gr.Row():
             with gr.Column():
-                gr.HTML('''<h2 id="input_header">Video 2 Image Sequence 👇</h2>''')
+                gr.HTML('''<h2>Video 2 Image Sequence 👇</h2>''')
                 inp = gr.Video(
                     type="file",
                     format="mp4",
                     label="Upload Video",
                     interactive=True,
                     width="auto",
-                    height=400,
+                    height=300,
                 )
-                btn = gr.Button("Upload Video")
+                with gr.Row():
+                    gr.ClearButton(inp)
+                    btn = gr.Button("Generate Image Sequence", elem_id="submit_video_button")
+                    
                 out_location = gr.Textbox(
                     show_copy_button=True,
                     type="text",
                     label="Image Sequence Location"
                 )
-
+                
                 btn.click(fn=submit_video, inputs=inp, outputs=out_location)
 
             with gr.Column():
-                gr.HTML('''<h2 id="input_header">Image Sequence 2 Video 👇</h2>''')
-                inp = gr.Textbox(
+                gr.HTML('''<h2>Image Sequence 2 Video 👇</h2>''')
+                with gr.Row():
+                    inp = gr.Textbox(
                     type="text",
                     label="Image Sequence Location",
-                )
-                btn = gr.Button("Generate Video")
+                    )
+                
+
                 out = gr.Video(
                     type="auto",
                     label="Generated Video",
                     width="auto",
-                    height=400,
+                    height=300,
                 )
+                btn = gr.Button("Generate Video", elem_id="generate_video_button")
                 btn.click(fn=image_sequence_to_video, inputs=inp, outputs=out)
 
     return (next_view, "NextView", "NextView"),
