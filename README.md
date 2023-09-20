@@ -65,7 +65,7 @@ On the right side you have the **Image Sequence 2 Video** section:
 - The output location of the video will be the following: "stable-diffusion-webui\extensions\next-view\output_videos
 - The video will be of MP4 format.
 
-## Credits 2 **Next Diffusion** ❤️
+## Credits: **Next Diffusion** ❤️
 
 - [Next Diffusion Website](https://www.nextdiffusion.ai/) 
 - [Next Diffusion Youtube](https://www.youtube.com/channel/UCd9UIUkLnjE-Fj-CGFdU74Q?sub_confirmation=1) 
