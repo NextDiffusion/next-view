@@ -5,9 +5,8 @@ Adds a 'NextView' tab to the webui that allows the user to:
 - Turn Video 2 Image Sequences
 - Turn Image Sequences 2 Video
 
-![Next Diffusion Next View](https://res.cloudinary.com/db7mzrftq/image/upload/v1695207953/Next_Diffusion_Next_View_Video2_Image_Sequence_Image_Sequence2_Video_d463eb9365.webp)
-
 ![Next_Diffusion_Next_View_Video2ImageSequence_ImageSequence2Video](https://res.cloudinary.com/db7mzrftq/image/upload/v1695207953/Next_Diffusion_Next_View_Video2_Image_Sequence_Image_Sequence2_Video_d463eb9365.webp)
+
 
 
 ## Requirements
