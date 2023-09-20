@@ -1,4 +1,4 @@
-# next-view
+# Next View
 Next View
 
 Adds a 'NextView' tab to the webui that allows the user to:
@@ -6,7 +6,8 @@ Adds a 'NextView' tab to the webui that allows the user to:
 - Turn Image Sequences 2 Video
 
 
-![Next_Diffusion_Next_View_Video2ImageSequence_ImageSequence2Video]([https://res.cloudinary.com/db7mzrftq/image/upload/v1690967355/Next_Diffusion_Prompt_Generator_Extension_79528d3a5b.png](https://res.cloudinary.com/db7mzrftq/image/upload/v1695207953/Next_Diffusion_Next_View_Video2_Image_Sequence_Image_Sequence2_Video_d463eb9365.webp))
+![Next_Diffusion_Next_View_Video2ImageSequence_ImageSequence2Video](https://res.cloudinary.com/db7mzrftq/image/upload/v1695207953/Next_Diffusion_Next_View_Video2_Image_Sequence_Image_Sequence2_Video_d463eb9365.webp)
+
 
 ## Requirements
 Make sure you have ffmpeg installed. Not sure [how to install ffmpeg]([https://www.nextdiffusion.ai/](https://www.nextdiffusion.ai/tutorials/how-to-install-ffmpeg-on-windows-for-stable-diffusion-a-comprehensive-guide)) on your machine?
@@ -36,7 +37,7 @@ In a nutshell, if you want to do anything with audio or video files, FFmpeg is a
 
 On the left side you have the **Video 2 Image Sequence** section where you can upload a video and turn in into an **image sequence**:
 
-![Next_Diffusion_Next_View_Video2ImageSequence]([https://res.cloudinary.com/db7mzrftq/image/upload/v1695209566/Next_Diffusion_Next_View_Video2_Image_Sequence_nextdiffusion_943d22af2e.webp])
+![Next_Diffusion_Next_View_Video2ImageSequence](https://res.cloudinary.com/db7mzrftq/image/upload/v1695209566/Next_Diffusion_Next_View_Video2_Image_Sequence_nextdiffusion_943d22af2e.webp)
 
 **Input**
 - Upload a video you want to turn to an image sequence
@@ -54,7 +55,7 @@ _You also have the option to click the "Clear" button to remove the uploaded vid
 
 On the right side you have the **Image Sequence 2 Video** section:
 
-![Next_Diffusion_Next_View_ImageSequence2Video]([https://res.cloudinary.com/db7mzrftq/image/upload/v1695209722/Next_Diffusion_Next_View_Image_Sequence2_Video_4cb9aca4ae.webp])
+![Next_Diffusion_Next_View_ImageSequence2Video](https://res.cloudinary.com/db7mzrftq/image/upload/v1695209722/Next_Diffusion_Next_View_Image_Sequence2_Video_4cb9aca4ae.webp)
 
 **Input**
 - Start by pasting a Image Sequence Location folder name
