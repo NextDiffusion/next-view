@@ -126,13 +126,14 @@ def on_ui_tabs():
                     width="auto",
                     height=300,
                 )
-                slider = gr.Slider(minimum=2, maximum=240, value=24, label="FPS", step=1, interactive=True,
-                                   info="Choose your FPS", elem_id="fps_slider")
+                
+                fps = gr.Slider(2, 240, value=24, label="Frames Per Second (FPS)", step=1, info="Choose your FPS", elem_id="fps_slider")
                 btn = gr.Button("Generate Video",
                                 elem_id="generate_video_button")
+            
 
                 btn.click(fn=image_sequence_to_video,
-                          inputs=[inp, slider], outputs=out)
+                          inputs=[inp, fps], outputs=out)
 
     return (next_view, "NextView", "NextView"),
 
