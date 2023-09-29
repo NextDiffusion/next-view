@@ -50,7 +50,7 @@ def submit_video(video):
     return str(output_dir)  # Return the output directory as a string
 
 
-def image_sequence_to_video(image_sequence_location):
+def image_sequence_to_video(image_sequence_location, fps):
     image_sequence_location = Path(image_sequence_location)
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     output_directory = Path(base_dir, "output_videos")
@@ -73,7 +73,7 @@ def image_sequence_to_video(image_sequence_location):
     # Use ffmpeg to convert image sequences into a video
     ffmpeg_cmd = [
         "ffmpeg",
-        "-framerate", "30",  # You can set the desired frame rate here
+        "-framerate", f"{fps}",  # You can set the desired frame rate here
         "-start_number", str(start_frame_number),  # Set the start frame number
         "-i", f"{image_sequence_location}/frame_%04d.png",
         "-c:v", "libx264",
@@ -84,9 +84,6 @@ def image_sequence_to_video(image_sequence_location):
 
     return output_video_path
 
-def clear_video_input(inp):
-    inp.value = None
-    return inp
 
 def on_ui_tabs():
 
@@ -104,24 +101,24 @@ def on_ui_tabs():
                 )
                 with gr.Row():
                     gr.ClearButton(inp)
-                    btn = gr.Button("Generate Image Sequence", elem_id="submit_video_button")
-                    
+                    btn = gr.Button("Generate Image Sequence",
+                                    elem_id="submit_video_button")
+
                 out_location = gr.Textbox(
                     show_copy_button=True,
                     type="text",
                     label="Image Sequence Location"
                 )
-                
+
                 btn.click(fn=submit_video, inputs=inp, outputs=out_location)
 
             with gr.Column():
                 gr.HTML('''<h2>Image Sequence 2 Video 👇</h2>''')
                 with gr.Row():
                     inp = gr.Textbox(
-                    type="text",
-                    label="Image Sequence Location",
+                        type="text",
+                        label="Image Sequence Location",
                     )
-                
 
                 out = gr.Video(
                     type="auto",
@@ -129,8 +126,13 @@ def on_ui_tabs():
                     width="auto",
                     height=300,
                 )
-                btn = gr.Button("Generate Video", elem_id="generate_video_button")
-                btn.click(fn=image_sequence_to_video, inputs=inp, outputs=out)
+                slider = gr.Slider(minimum=2, maximum=240, value=24, label="FPS", step=1, interactive=True,
+                                   info="Choose your FPS", elem_id="fps_slider")
+                btn = gr.Button("Generate Video",
+                                elem_id="generate_video_button")
+
+                btn.click(fn=image_sequence_to_video,
+                          inputs=[inp, slider], outputs=out)
 
     return (next_view, "NextView", "NextView"),
 
