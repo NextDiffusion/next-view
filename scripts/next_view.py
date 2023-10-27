@@ -58,29 +58,34 @@ def image_sequence_to_video(image_sequence_location, fps):
     output_directory.mkdir(parents=True, exist_ok=True)
     output_video_path = output_directory / f"output_video_{timestamp}.mp4"
 
-    # Detect the first frame number dynamically
+    # Detect the frame numbers dynamically
     frame_files = sorted(image_sequence_location.glob("frame_*.png"))
-    if frame_files:
-        first_frame = frame_files[0].name
-        match = re.search(r'(\d+)', first_frame)
-        if match:
-            start_frame_number = int(match.group())
-        else:
-            start_frame_number = 1
-    else:
-        start_frame_number = 1
+    frame_numbers = [int(re.search(r'(\d+)', frame.name).group())
+                     for frame in frame_files]
+
+    print(f"Detected frame numbers: {frame_numbers}")
+
+    # Create a list of input files for ffmpeg
+    input_files = [
+        f"{image_sequence_location}/frame_{num:04d}.png" for num in frame_numbers]
+
+    print(f"Input files for ffmpeg: {input_files}")
 
     # Use ffmpeg to convert image sequences into a video
     ffmpeg_cmd = [
         "ffmpeg",
         "-framerate", f"{fps}",  # You can set the desired frame rate here
-        "-start_number", str(start_frame_number),  # Set the start frame number
-        "-i", f"{image_sequence_location}/frame_%04d.png",
+        "-i", f"concat:{'|'.join(input_files)}",
         "-c:v", "libx264",
         "-pix_fmt", "yuv420p",
         output_video_path,
     ]
+
+    print(f"Running ffmpeg command: {' '.join(map(str, ffmpeg_cmd))}")
+
     subprocess.run(ffmpeg_cmd)
+
+    print(f"Video generated at: {output_video_path}")
 
     return output_video_path
 
@@ -126,11 +131,11 @@ def on_ui_tabs():
                     width="auto",
                     height=300,
                 )
-                
-                fps = gr.Slider(2, 240, value=24, label="Frames Per Second (FPS)", step=1, info="Choose your FPS", elem_id="fps_slider")
+
+                fps = gr.Slider(2, 240, value=24, label="Frames Per Second (FPS)",
+                                step=1, info="Choose your FPS", elem_id="fps_slider")
                 btn = gr.Button("Generate Video",
                                 elem_id="generate_video_button")
-            
 
                 btn.click(fn=image_sequence_to_video,
                           inputs=[inp, fps], outputs=out)
