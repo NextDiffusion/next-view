@@ -58,34 +58,29 @@ def image_sequence_to_video(image_sequence_location, fps):
     output_directory.mkdir(parents=True, exist_ok=True)
     output_video_path = output_directory / f"output_video_{timestamp}.mp4"
 
-    # Detect the frame numbers dynamically
+    # Detect the first frame number dynamically
     frame_files = sorted(image_sequence_location.glob("frame_*.png"))
-    frame_numbers = [int(re.search(r'(\d+)', frame.name).group())
-                     for frame in frame_files]
-
-    print(f"Detected frame numbers: {frame_numbers}")
-
-    # Create a list of input files for ffmpeg
-    input_files = [
-        f"{image_sequence_location}/frame_{num:04d}.png" for num in frame_numbers]
-
-    print(f"Input files for ffmpeg: {input_files}")
+    if frame_files:
+        first_frame = frame_files[0].name
+        match = re.search(r'(\d+)', first_frame)
+        if match:
+            start_frame_number = int(match.group())
+        else:
+            start_frame_number = 1
+    else:
+        start_frame_number = 1
 
     # Use ffmpeg to convert image sequences into a video
     ffmpeg_cmd = [
         "ffmpeg",
         "-framerate", f"{fps}",  # You can set the desired frame rate here
-        "-i", f"concat:{'|'.join(input_files)}",
+        "-start_number", str(start_frame_number),  # Set the start frame number
+        "-i", f"{image_sequence_location}/frame_%04d.png",
         "-c:v", "libx264",
         "-pix_fmt", "yuv420p",
         output_video_path,
     ]
-
-    print(f"Running ffmpeg command: {' '.join(map(str, ffmpeg_cmd))}")
-
     subprocess.run(ffmpeg_cmd)
-
-    print(f"Video generated at: {output_video_path}")
 
     return output_video_path
 
