@@ -80,8 +80,8 @@ def image_sequence_to_video(image_sequence_location, fps):
     output_directory.mkdir(parents=True, exist_ok=True)
 
     frame_files = sorted(image_sequence_location.glob(
-        "frame_*.png"), key=lambda x: int(re.search(r'(\d+)', x.name).group()))
-    frame_numbers = [int(re.search(r'(\d+)', frame.name).group())
+        "frame_*.png"), key=lambda x: tuple(map(int, re.findall(r'frame_(\d+)(?:-\d+)?\.png', x.name))))
+    frame_numbers = [int(re.search(r'frame_(\d+)(?:-\d+)?\.png', frame.name).group(1))
                      for frame in frame_files]
 
     # Set total_frames based on the total number of frames in frame_numbers
@@ -90,9 +90,8 @@ def image_sequence_to_video(image_sequence_location, fps):
     # Explicitly create a file list with correct order
     file_list_path = Path(base_dir, "file_list.txt")
     with file_list_path.open('w') as file_list:
-        for num in frame_numbers:
-            file_list.write(
-                f"file '{image_sequence_location}/frame_{num:04d}.png'\n")
+        for frame in frame_files:
+            file_list.write(f"file '{frame}'\n")
 
     # Use ffmpeg with the file list to generate the output video
     output_video_path = output_directory / f"output_video_{timestamp}.mp4"
