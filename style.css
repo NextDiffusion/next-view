@@ -6,3 +6,15 @@
     cursor: pointer !important;
     transition: background-color 0.3s !important;
 }
+
+#open_location_button {
+    max-width: 2.5em;
+    min-width: 2.5em !important;
+    height: 2.4em;
+}
+
+#output_row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
