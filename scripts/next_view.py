@@ -130,8 +130,14 @@ def image_sequence_to_video(image_sequence_location, fps):
 
 
 def open_file_location(output_dir):
-    # Open the file location when the button is clicked
+    # Open the image sequence file location when the button is clicked
     subprocess.Popen(["explorer", str(output_dir)], shell=True)
+
+
+def open_video_file_location():
+    # Open the video file location when the button is clicked
+    video_file_location = Path(base_dir, "output_videos")
+    subprocess.Popen(["explorer", str(video_file_location)], shell=True)
 
 
 def on_ui_tabs():
@@ -199,9 +205,15 @@ def on_ui_tabs():
                 # Define the slider for selecting frames per second (FPS)
                 fps = gr.Slider(2, 240, value=24, label="Frames Per Second (FPS)",
                                 step=1, info="Choose your FPS", elem_id="fps_slider")
-                # Define the button for generating the video
-                btn = gr.Button("Generate Video",
-                                elem_id="generate_video_button")
+
+                with gr.Row(elem_id="output_row"):
+                    # Define the button for generating the video
+                    btn = gr.Button("Generate Video",
+                                    elem_id="generate_video_button")
+                    open_video_location_button = gr.Button(variant='secondary', size='sm', value="📂",
+                                                           elem_id="open_location_button", scale=0)
+                    open_video_location_button.click(
+                        fn=open_video_file_location)
 
                 # Set the click function for the "Generate Video" button
                 btn.click(fn=image_sequence_to_video,
