@@ -5,7 +5,6 @@ from modules import script_callbacks
 import modules.scripts as scripts
 import datetime
 import re
-import tempfile
 
 base_dir = scripts.basedir()
 
