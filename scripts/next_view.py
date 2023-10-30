@@ -10,7 +10,7 @@ import tempfile
 base_dir = scripts.basedir()
 
 
-def split_video_to_images(video_path, output_dir):
+def split_video_to_images(video_path, output_dir, final_log_textbox):
     # Define the pattern for naming the output frames
     output_pattern = Path(output_dir) / "frame_%04d.png"
 
@@ -23,9 +23,11 @@ def split_video_to_images(video_path, output_dir):
         "-of", "default=noprint_wrappers=1:nokey=1",
         video_path,
     ]
-    result = subprocess.run(ffprobe_cmd, stdout=subprocess.PIPE, text=True)
+    with subprocess.Popen(ffprobe_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
+        result, _ = process.communicate()
+
     # Convert the frame rate string to a float
-    frame_rate = eval(result.stdout)
+    frame_rate = eval(result)
     print(f"Frame rate of input video: {frame_rate} fps")
 
     # Use ffmpeg to split the video into image sequences with the determined frame rate
@@ -35,11 +37,23 @@ def split_video_to_images(video_path, output_dir):
         "-vf", f"fps={frame_rate}",
         output_pattern,
     ]
-    subprocess.run(ffmpeg_cmd)
-    print(f"Video split into image sequences with {frame_rate} fps.")
+    with subprocess.Popen(ffmpeg_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as process:
+        _, _ = process.communicate()
+
+    # Count the number of frames and calculate the total size
+    frame_files = list(output_dir.glob("frame_*.png"))
+    num_frames = len(frame_files)
+    total_size = sum(f.stat().st_size for f in frame_files) / \
+        (1024 * 1024)  # Convert to MB
+    final_log = f"Video split into {num_frames} images with {frame_rate} fps. The total size is {total_size:.2f} MB."
+
+    print(
+        f"Video split into {num_frames} images with {frame_rate} fps. The total size is {total_size:.2f} MB.")
+
+    return final_log
 
 
-def submit_video(video):
+def submit_video(video, final_log_textbox):
     # Convert the video path to a pathlib.Path object
     video_directory = Path(video)
     print(f"Uploaded video directory: {video_directory}")
@@ -53,8 +67,9 @@ def submit_video(video):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Split the uploaded video into image sequences
-    split_video_to_images(video, output_dir)
-    return str(output_dir)  # Return the output directory as a string
+    final_log = split_video_to_images(video, output_dir, final_log_textbox)
+    # Return the output directory as a string
+    return [str(output_dir), final_log]
 
 
 def image_sequence_to_video(image_sequence_location, fps):
@@ -68,6 +83,9 @@ def image_sequence_to_video(image_sequence_location, fps):
         "frame_*.png"), key=lambda x: int(re.search(r'(\d+)', x.name).group()))
     frame_numbers = [int(re.search(r'(\d+)', frame.name).group())
                      for frame in frame_files]
+
+    # Set total_frames based on the total number of frames in frame_numbers
+    total_frames = len(frame_numbers)
 
     # Explicitly create a file list with correct order
     file_list_path = Path(base_dir, "file_list.txt")
@@ -89,14 +107,32 @@ def image_sequence_to_video(image_sequence_location, fps):
         str(output_video_path),
     ]
 
-    subprocess.run(ffmpeg_cmd)
+    with subprocess.Popen(ffmpeg_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True) as process:
+        # Regular expression to extract frame information from stderr
+        frame_regex = re.compile(r"frame=\s*(\d+)")
+        for line in process.stderr:
+            # Extract and print progress information
+            match = frame_regex.search(line)
+            if match:
+                current_frame = int(match.group(1))
+                progress = current_frame / total_frames
+                progress_bar_length = 50
+                bar = "♥" * int(progress * progress_bar_length)
+                spaces = " " * (progress_bar_length - len(bar))
+                print(
+                    f"Generating your video with {fps} FPS: [{bar}{spaces}] {current_frame}/{total_frames} frames processed", end="\r")
 
     # Remove the temporary file list
     file_list_path.unlink()
 
-    print(f"Video generated at: {output_video_path}")
+    print(f"\nVideo generated. File Location: {output_video_path}")
 
     return str(output_video_path)
+
+
+def open_file_location(output_dir):
+    # Open the file location when the button is clicked
+    subprocess.Popen(["explorer", str(output_dir)], shell=True)
 
 
 def on_ui_tabs():
@@ -119,16 +155,30 @@ def on_ui_tabs():
                     # Define the button for generating image sequences
                     btn = gr.Button("Generate Image Sequence",
                                     elem_id="submit_video_button")
+                with gr.Row(elem_id="output_row"):
+                    # Define the output component for displaying the image sequence location
+                    out_location = gr.Textbox(
+                        show_copy_button=True,
+                        type="text",
+                        label="Image Sequence Location",
+                        width="auto",
+                    )
+                    open_location_button = gr.Button(variant='secondary', size='sm', value="📂",
+                                                     elem_id="open_location_button", scale=0)
+                    open_location_button.click(
+                        fn=open_file_location, inputs=out_location)
 
-                # Define the output component for displaying the image sequence location
-                out_location = gr.Textbox(
-                    show_copy_button=True,
+                # Define the Textbox component for displaying the final log
+                final_log_textbox = gr.Textbox(
                     type="text",
-                    label="Image Sequence Location"
+                    label="Result Information",
+                    default="Final information will be displayed here.",
+                    width="auto",
                 )
 
                 # Set the click function for the "Generate Image Sequence" button
-                btn.click(fn=submit_video, inputs=inp, outputs=out_location)
+                btn.click(fn=submit_video, inputs=inp, outputs=[
+                          out_location, final_log_textbox])
 
             with gr.Column():
                 gr.HTML('''<h2>Image Sequence 2 Video 👇</h2>''')
