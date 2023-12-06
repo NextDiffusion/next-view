@@ -14,7 +14,7 @@ Follow the steps below to install FFmpeg on your windows machine:
 
 Here's a simple breakdown:
 - Open your command prompt
-- Enter the following command: winget install -e --id Gyan.FFmpeg
+- Enter the following command and hit enter: winget install -e --id Gyan.FFmpeg
 - Voila! FFmpeg is now installed
 
 ## Installation NextView Extension
