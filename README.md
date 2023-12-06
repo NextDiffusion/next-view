@@ -7,19 +7,15 @@ Adds a '**NextView**' tab to the Stable Diffusion Web UI that allows the user to
 ![Next_Diffusion_Next_View_Video2ImageSequence_ImageSequence2Video](https://res.cloudinary.com/db7mzrftq/image/upload/v1695207953/Next_Diffusion_Next_View_Video2_Image_Sequence_Image_Sequence2_Video_d463eb9365.webp)
 
 ## Requirements
-Make sure you have ffmpeg installed. Not sure [how to install ffmpeg](https://www.nextdiffusion.ai/tutorials/how-to-install-ffmpeg-on-windows-for-stable-diffusion-a-comprehensive-guide) on your machine?
+Make sure you have FFmpeg installed.
 
-### What is FFmpeg?
-FFmpeg is a powerful and versatile software tool that allows you to work with audio and video files. It's like a Swiss Army knife for multimedia tasks.
+### How to install FFmpeg?
+Follow the steps below to install FFmpeg on your windows machine:
 
 Here's a simple breakdown:
-- Audio and Video: FFmpeg can handle both audio (sound) and video (moving images).
-- Conversion: You can use FFmpeg to convert one type of audio or video file into another. For example, you can change a video from one format to another, like from MP4 to AVI.
-- Editing: FFmpeg lets you edit multimedia files. You can cut, join, or even add effects to videos and audio.
-- Streaming: It's also used for streaming media online. Many streaming platforms use FFmpeg behind the scenes.
-- Open Source: FFmpeg is open-source software, which means it's free to use and is continually improved by a community of developers.
-
-In a nutshell, if you want to do anything with audio or video files, FFmpeg is a handy tool to have in your toolbox.
+- Open your command prompt
+- Enter the following command: winget install -e --id Gyan.FFmpeg
+- Voila! FFmpeg is now installed
 
 ## Installation NextView Extension
 
