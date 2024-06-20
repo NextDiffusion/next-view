@@ -7,10 +7,14 @@
     transition: background-color 0.3s !important;
 }
 
-#open_location_button {
+#open_location_button,#open_video_location_button {
     max-width: 2.5em;
     min-width: 2.5em !important;
     height: 2.4em;
+}
+
+#open_video_location_button{
+    align-self: flex-end;
 }
 
 #output_row {

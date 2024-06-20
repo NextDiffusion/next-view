@@ -52,7 +52,7 @@ def split_video_to_images(video_path, output_dir, final_log_textbox):
     return final_log
 
 
-def submit_video(video, final_log_textbox):
+def submit_video(video,out_dir, final_log_textbox):
     # Convert the video path to a pathlib.Path object
     video_directory = Path(video)
     print(f"Uploaded video directory: {video_directory}")
@@ -61,7 +61,10 @@ def submit_video(video, final_log_textbox):
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
     # Create a unique subfolder within "image_sequences" using the timestamp and random identifier
-    output_dir = Path(base_dir, "image_sequences", f"{timestamp}")
+    if out_dir == "":
+        output_dir = Path(base_dir, "image_sequences", f"{timestamp}")
+    else:
+        output_dir = Path(out_dir,"image_sequences", f"{timestamp}")
     # Create parent directories if needed
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -71,11 +74,17 @@ def submit_video(video, final_log_textbox):
     return [str(output_dir), final_log]
 
 
-def image_sequence_to_video(image_sequence_location, fps):
+def image_sequence_to_video(image_sequence_location, fps, video_out_location):
     # Convert the image sequence location to an absolute path
     image_sequence_location = Path(image_sequence_location).absolute()
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    output_directory = Path(base_dir, "output_videos")
+
+    if video_out_location == "":
+        output_directory = Path(base_dir, "output_videos")
+    else:
+        output_directory = Path(video_out_location,"output_videos")
+
+    
     output_directory.mkdir(parents=True, exist_ok=True)
 
     frame_files = sorted(image_sequence_location.glob(
@@ -133,9 +142,9 @@ def open_file_location(output_dir):
     subprocess.Popen(["explorer", str(output_dir)], shell=True)
 
 
-def open_video_file_location():
+def open_video_file_location(output_dir):
     # Open the video file location when the button is clicked
-    video_file_location = Path(base_dir, "output_videos")
+    video_file_location = Path(output_dir, "output_videos")
     subprocess.Popen(["explorer", str(video_file_location)], shell=True)
 
 
@@ -162,9 +171,9 @@ def on_ui_tabs():
                 with gr.Row(elem_id="output_row"):
                     # Define the output component for displaying the image sequence location
                     out_location = gr.Textbox(
-                        show_copy_button=True,
+                        show_copy_button=False,
                         type="text",
-                        label="Image Sequence Location",
+                        label="Image Sequence Location (if blank, default location)",
                         width="auto",
                     )
                     open_location_button = gr.Button(variant='secondary', size='sm', value="📂",
@@ -181,7 +190,7 @@ def on_ui_tabs():
                 )
 
                 # Set the click function for the "Generate Image Sequence" button
-                btn.click(fn=submit_video, inputs=inp, outputs=[
+                btn.click(fn=submit_video, inputs=[inp,out_location], outputs=[
                           out_location, final_log_textbox])
 
             with gr.Column():
@@ -192,6 +201,18 @@ def on_ui_tabs():
                         type="text",
                         label="Image Sequence Location",
                     )
+
+                with gr.Row():   
+                    video_out_location = gr.Textbox(
+                        show_copy_button=False,
+                        type="text",
+                        label="Video Out Location (if blank, default location)",
+                        width="auto",
+                    )
+                    open_video_location_button = gr.Button(variant='secondary', size='sm', value="📂",
+                                                           elem_id="open_video_location_button", scale=0)
+                    open_video_location_button.click(
+                        fn=open_video_file_location,inputs=video_out_location)
 
                 # Define the output component for displaying the generated video
                 out = gr.Video(
@@ -209,14 +230,10 @@ def on_ui_tabs():
                     # Define the button for generating the video
                     btn = gr.Button("Generate Video",
                                     elem_id="generate_video_button")
-                    open_video_location_button = gr.Button(variant='secondary', size='sm', value="📂",
-                                                           elem_id="open_location_button", scale=0)
-                    open_video_location_button.click(
-                        fn=open_video_file_location)
 
                 # Set the click function for the "Generate Video" button
                 btn.click(fn=image_sequence_to_video,
-                          inputs=[inp, fps], outputs=out)
+                          inputs=[inp, fps, video_out_location], outputs=out)
 
     return (next_view, "NextView", "NextView"),
 
