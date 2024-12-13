@@ -74,7 +74,7 @@ def submit_video(video,out_dir, final_log_textbox):
     return [str(output_dir), final_log]
 
 
-def image_sequence_to_video(image_sequence_location, fps, video_out_location):
+def image_sequence_to_video(image_sequence_location, fps, video_out_location, images_pattern, images_regex):
     # Convert the image sequence location to an absolute path
     image_sequence_location = Path(image_sequence_location).absolute()
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -88,8 +88,8 @@ def image_sequence_to_video(image_sequence_location, fps, video_out_location):
     output_directory.mkdir(parents=True, exist_ok=True)
 
     frame_files = sorted(image_sequence_location.glob(
-        "frame_*.png"), key=lambda x: tuple(map(int, re.findall(r'frame_(\d+)(?:-\d+)?\.png', x.name))))
-    frame_numbers = [int(re.search(r'frame_(\d+)(?:-\d+)?\.png', frame.name).group(1))
+        images_pattern), key=lambda x: tuple(map(int, re.findall(r''+images_regex+'', x.name))))
+    frame_numbers = [int(re.search(r''+images_regex+'', frame.name).group(1))
                      for frame in frame_files]
 
     # Set total_frames based on the total number of frames in frame_numbers
@@ -226,6 +226,20 @@ def on_ui_tabs():
                 fps = gr.Slider(2, 240, value=24, label="Frames Per Second (FPS)",
                                 step=1, info="Choose your FPS", elem_id="fps_slider")
 
+                with gr.Accordion(label="Image sequence settings", open=False):
+                    images_pattern = gr.Textbox(
+                        label="Images pattern",
+                        lines=1,
+                        value='frame_*.png',
+                        info="The pattern used to get the images"
+                    )
+                    images_regex = gr.Textbox(
+                        label="Images regex",
+                        lines=1,
+                        value='frame_(\d+)(?:-\d+)?\.png',
+                        info="Define the regex used to order the images, note that the first group (wrapped by parenthesis) is used to determine the order. (the regex must be compatible with the pattern defined above)"
+                    )
+
                 with gr.Row(elem_id="output_row"):
                     # Define the button for generating the video
                     btn = gr.Button("Generate Video",
@@ -233,7 +247,7 @@ def on_ui_tabs():
 
                 # Set the click function for the "Generate Video" button
                 btn.click(fn=image_sequence_to_video,
-                          inputs=[inp, fps, video_out_location], outputs=out)
+                          inputs=[inp, fps, video_out_location, images_pattern, images_regex], outputs=out)
 
     return (next_view, "NextView", "NextView"),
 
