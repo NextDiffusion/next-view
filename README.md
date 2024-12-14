@@ -53,7 +53,7 @@ On the right side you have the "Image Sequence 2 Video" section:
 **Input**
 - Start by pasting an "Image Sequence Location" folder name
 - The images within this folder **should be of PNG format**
-- The images **should have the following naming structure** when converting to a video: "frame_0001", "frame_0002" etc. 
+- The images **should have the following naming structure** when converting to a video: "frame_0001", "frame_0002" etc. (You can change these settings in the "Image sequence settings" section)
 - When everything is correct you can click on the "Generate Video" button to turn it into an image sequence
 
 **Output**
